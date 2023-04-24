@@ -13,5 +13,22 @@ namespace Microsoft.Maui.DeviceTests.Stubs
 			: base()
 		{
 		}
+
+		protected override void ConnectHandler(UI.Xaml.Window platformView)
+		{
+			if (platformView.Content is null)
+				platformView.Content = new TestWindowRootViewContainer(platformView);
+			base.ConnectHandler(platformView);
+		}
+
+		class TestWindowRootViewContainer : WindowRootViewContainer, AssertionExtensions.IWindowProvider
+		{
+			public TestWindowRootViewContainer(Window window)
+			{
+				Window = window;
+			}
+
+			public Window Window { get; private set; }
+		}
 	}
 }

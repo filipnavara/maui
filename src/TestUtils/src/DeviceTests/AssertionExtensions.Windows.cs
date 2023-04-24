@@ -251,7 +251,7 @@ namespace Microsoft.Maui.DeviceTests
 			else
 			{
 				// Window is not a XAML type so is never on the hierarchy
-				var window = view.GetParentOfType<TestWindowRoot>()?.Window ?? throw new InvalidOperationException("View was attached to a window but there was no window.");
+				var window = view.GetParentOfType<IWindowProvider>()?.Window ?? throw new InvalidOperationException("View was attached to a window but there was no window.");
 				return await Run(() => action(window));
 			}
 
@@ -484,7 +484,12 @@ namespace Microsoft.Maui.DeviceTests
 			throw new NotImplementedException();
 		}
 
-		class TestWindowRoot : Grid
+		public interface IWindowProvider
+		{
+			Window Window { get; }
+		}
+
+		class TestWindowRoot : Grid, IWindowProvider
 		{
 			public TestWindowRoot(Window window)
 			{
